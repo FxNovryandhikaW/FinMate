@@ -5,66 +5,104 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.navigation.compose.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.finmate.model.Finance
+import com.example.finmate.model.FinanceSource
 import com.example.finmate.ui.theme.FinMateTheme
-import model.TransactionSource
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             FinMateTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TransactionList(modifier = Modifier.padding(innerPadding))
+                    DaftarFinanceScreen(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+
                 }
+
             }
         }
     }
 }
 
 @Composable
-fun TransactionList(modifier: Modifier = Modifier) {
-    val list = TransactionSource.dummyTransaction
+fun DaftarFinanceScreen(modifier: Modifier = Modifier) {
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        list.forEach { transaksi ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 8.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = transaksi.imageRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(200.dp).padding(end = 16.dp)
-                )
-                Column {
-                    Text(text = "Nama: ${transaksi.nama}")
-                    Text(text = "Kategori: ${transaksi.kategori}")
-                    Text(text = "Jumlah: Rp ${transaksi.jumlah}")
-                }
-            }
-            Text(text = "------------------------------------------")
+    val listFinance = FinanceSource.dummyFinance
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "FinMate",
+            style = MaterialTheme.typography.headlineMedium
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        listFinance.forEach { finance ->
+            DetailFinanceScreen(finance)
+            Spacer(modifier = Modifier.height(24.dp))
         }
+
+    }
+}
+
+@Composable
+fun DetailFinanceScreen(finance: Finance) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Image(
+            painter = painterResource(id = finance.imageRes),
+            contentDescription = finance.judul,
+            modifier = Modifier.size(90.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(text = finance.judul)
+            Text(text = "Kategori: ${finance.kategori}")
+            Text(text = "Jumlah: Rp ${finance.jumlah}")
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {},
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Tambah Catatan")
+            }
+        }
+
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun TransactionListPreview() {
+fun PreviewFinance() {
     FinMateTheme {
-        TransactionList()
+        DaftarFinanceScreen()
     }
 }
