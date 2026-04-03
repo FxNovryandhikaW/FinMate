@@ -111,8 +111,8 @@ fun DaftarFinanceScreen(modifier: Modifier = Modifier) {
         )
         Text(
             text = "Tersisa $remainingDaysInMonth hari lagi menuju akhir bulan",
-            fontSize = 14.sp,
-            color = Color.Gray
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -154,9 +154,11 @@ fun DaftarFinanceScreen(modifier: Modifier = Modifier) {
                 Text(text = "Sisa Saldo", fontSize = 12.sp)
                 Text(
                     text = "Rp $sisaSaldo",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (sisaSaldo < 0) Color.Red else Color.Green
+                    style = MaterialTheme.typography.titleLarge,
+                    color = if (sisaSaldo < 0)
+                        MaterialTheme.colorScheme.error
+                    else
+                        MaterialTheme.colorScheme.primary
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
@@ -179,7 +181,6 @@ fun DaftarFinanceScreen(modifier: Modifier = Modifier) {
 
         Text(
             text = "Riwayat Transaksi",
-            fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -377,14 +378,14 @@ fun DetailFinanceScreen(finance: Finance) {
                 )
                 Text(
                     text = "${finance.tanggal} • ${finance.kategori}",
-                    fontSize = 12.sp,
-                    color = Color.Gray
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
             Text(
                 text = "Rp ${finance.jumlah}",
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.primary
             )
         }
