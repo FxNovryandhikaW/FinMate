@@ -45,11 +45,11 @@ fun TambahFinanceForm(onTambah: (Finance) -> Unit) {
     var urlGambar by remember { mutableStateOf("") } // State baru untuk URL Gambar
 
     val calendar = Calendar.getInstance()
-    val dateString = "${calendar.get(Calendar.DAY_OF_MONTH)} ${calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())} ${calendar.get(Calendar.YEAR)}"
+    val dateString = "${calendar[Calendar.DAY_OF_MONTH]} ${calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())} ${calendar[Calendar.YEAR]}"
 
     val categories = listOf("Makanan", "Minuman", "Transport", "Internet", "Lainnya")
     var selectedKategori by remember { mutableStateOf(categories[0]) }
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(value = false) }
 
     Card(modifier = Modifier.fillMaxWidth(), elevation = CardDefaults.cardElevation(2.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -61,7 +61,7 @@ fun TambahFinanceForm(onTambah: (Finance) -> Unit) {
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Tanggal: $dateString",
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
             }
 
@@ -141,7 +141,7 @@ fun TambahFinanceForm(onTambah: (Finance) -> Unit) {
                             kategori = selectedKategori,
                             jumlah = harga.toIntOrNull() ?: 0,
                             tanggal = dateString,
-                            imageUrl = if (urlGambar.isNotEmpty()) urlGambar else "https://via.placeholder.com/150"
+                            imageUrl = urlGambar.ifEmpty { "https://via.placeholder.com/150" }
                         )
                         onTambah(financeBaru)
                         nama = ""

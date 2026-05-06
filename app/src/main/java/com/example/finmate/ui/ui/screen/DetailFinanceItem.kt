@@ -38,7 +38,7 @@ import com.example.finmate.model.FinanceSource
 
 @Composable
 fun FinanceItem(finance: Finance) {
-    var isFavorite by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(value = false) }
     val context = LocalContext.current
 
     // Logika Hybrid: Cek apakah ini gambar lokal atau URL internet
@@ -48,7 +48,7 @@ fun FinanceItem(finance: Finance) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Row(
             modifier = Modifier.padding(12.dp),

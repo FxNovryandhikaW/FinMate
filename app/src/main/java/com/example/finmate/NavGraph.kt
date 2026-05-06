@@ -31,7 +31,7 @@ fun NavGraph() {
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         ) {
             composable(Screen.Home.route) {
                 DaftarFinanceScreen(navController, viewModel) { fetchedData ->
@@ -45,8 +45,9 @@ fun NavGraph() {
             // Contoh implementasi detail jika diperlukan (Langkah 7)
             composable("detail/{judul}") { backStackEntry ->
                 val judul = backStackEntry.arguments?.getString("judul")
-                val finance = finances.find { it.judul == judul }
-                // Tampilkan Detail Screen di sini
+                finances.find { it.judul == judul }?.let { _ ->
+                    // Tampilkan Detail Screen di sini menggunakan finance
+                }
             }
         }
     }

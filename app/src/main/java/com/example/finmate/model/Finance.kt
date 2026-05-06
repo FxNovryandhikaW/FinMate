@@ -16,5 +16,5 @@ data class Finance(
     val tanggal: String = "Hari ini",
 
     @SerializedName(value = "image_url", alternate = ["image_name"])
-    val imageUrl: String = ""
+    val imageUrl: String = "",
 )

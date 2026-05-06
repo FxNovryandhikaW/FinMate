@@ -1,6 +1,7 @@
 package com.example.finmate.viewModel
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -14,10 +15,10 @@ class FinanceViewModel : ViewModel() {
     var listFinance by mutableStateOf<List<Finance>>(emptyList())
         private set
 
-    var saldoAwal by mutableStateOf(0)
+    var saldoAwal by mutableIntStateOf(0)
         private set
 
-    var isLoading by mutableStateOf(false)
+    var isLoading by mutableStateOf(value = false)
         private set
 
     init {

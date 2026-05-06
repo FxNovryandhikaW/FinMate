@@ -42,7 +42,7 @@ fun DaftarFinanceScreen(
     navController: NavController,
     viewModel: FinanceViewModel,
     modifier: Modifier = Modifier,
-    onFinanceLoaded: (List<Finance>) -> Unit = {}
+    onFinanceLoaded: (List<Finance>) -> Unit = {},
 ) {
     // Menjalankan proses asynchronous (Langkah 7)
     LaunchedEffect(Unit) {
@@ -51,8 +51,8 @@ fun DaftarFinanceScreen(
 
     val calendar = Calendar.getInstance()
     val monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) ?: ""
-    val year = calendar.get(Calendar.YEAR)
-    val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+    val year = calendar[Calendar.YEAR]
+    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
     val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
     val remainingDaysInMonth = daysInMonth - dayOfMonth
 
