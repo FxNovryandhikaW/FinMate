@@ -1,6 +1,5 @@
 package com.example.finmate.ui.ui.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,14 +26,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.finmate.R
 import com.example.finmate.model.Finance
+import com.example.finmate.model.FinanceSource
 
 @Composable
-fun DetailFinanceScreen(finance: Finance) {
+fun FinanceItem(finance: Finance) {
     var isFavorite by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    // Logika Hybrid: Cek apakah ini gambar lokal atau URL internet
+    val resId = FinanceSource.getResourceId(context, finance.imageUrl)
+    val modelRes = if (resId != 0) resId else finance.imageUrl
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -46,11 +55,15 @@ fun DetailFinanceScreen(finance: Finance) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box {
-                Image(
-                    painter = painterResource(id = finance.imageRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(50.dp)
+                AsyncImage(
+                    model = modelRes, // Bisa berisi ID (R.drawable.xx) atau String (URL)
+                    contentDescription = finance.judul,
+                    modifier = Modifier.size(50.dp),
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.makan),
+                    error = painterResource(R.drawable.makan)
                 )
+
                 IconButton(
                     onClick = { isFavorite = !isFavorite },
                     modifier = Modifier.size(24.dp).align(Alignment.TopEnd)

@@ -1,6 +1,7 @@
 package com.example.finmate.ui.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,12 +15,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,7 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.finmate.model.FinanceSource
+import com.example.finmate.model.Finance
 import com.example.finmate.viewModel.FinanceViewModel
 import java.util.Calendar
 import java.util.Locale
@@ -39,8 +41,14 @@ import java.util.Locale
 fun DaftarFinanceScreen(
     navController: NavController,
     viewModel: FinanceViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFinanceLoaded: (List<Finance>) -> Unit = {}
 ) {
+    // Menjalankan proses asynchronous (Langkah 7)
+    LaunchedEffect(Unit) {
+        viewModel.fetchFinance(onSuccess = onFinanceLoaded)
+    }
+
     val calendar = Calendar.getInstance()
     val monthName = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) ?: ""
     val year = calendar.get(Calendar.YEAR)
@@ -52,6 +60,7 @@ fun DaftarFinanceScreen(
 
     val listFinance = viewModel.listFinance
     val saldoAwal = viewModel.saldoAwal
+    val isLoading = viewModel.isLoading
 
     val totalPengeluaran = listFinance.sumOf { it.jumlah }
     val sisaSaldo = saldoAwal - totalPengeluaran
@@ -62,6 +71,12 @@ fun DaftarFinanceScreen(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxWidth().padding(20.dp), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+
         Text(
             text = "Laporan Bulan $monthName $year",
             style = MaterialTheme.typography.headlineMedium,
@@ -133,13 +148,13 @@ fun DaftarFinanceScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-                onClick = {
-                    navController.navigate("add")
-                },
-        modifier = Modifier.fillMaxWidth()
+            onClick = {
+                navController.navigate("add")
+            },
+            modifier = Modifier.fillMaxWidth()
         ) {
-        Text("Tambah Transaksi")
-    }
+            Text("Tambah Transaksi")
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -150,7 +165,7 @@ fun DaftarFinanceScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         listFinance.forEach { finance ->
-            DetailFinanceScreen(finance)
+            FinanceItem(finance)
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
