@@ -44,9 +44,14 @@ class FinanceViewModel : ViewModel() {
     }
 
     fun tambahFinance(finance: Finance) {
-        val currentState = uiState
-        if (currentState is FinanceUiState.Success) {
-            uiState = FinanceUiState.Success(listOf(finance) + currentState.data)
+        when (val currentState = uiState) {
+            is FinanceUiState.Success -> {
+                uiState = FinanceUiState.Success(listOf(finance) + currentState.data)
+            }
+            else -> {
+                // Jika sedang loading atau error, kita tetap bisa menampilkan data baru
+                uiState = FinanceUiState.Success(listOf(finance))
+            }
         }
     }
 
