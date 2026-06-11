@@ -1,30 +1,46 @@
 package com.example.finmate.model
 
-import com.google.gson.annotations.SerializedName
+import com.example.finmate.data.local.FinanceEntity
 
-/**
- * Representasi data transaksi keuangan.
- */
 data class Finance(
-    @SerializedName("nama")
-    val judul: String,
-    
-    @SerializedName("deskripsi")
-    val kategori: String,
-    
-    @SerializedName("harga")
-    val jumlah: Int,
-    
-    @SerializedName("tanggal")
-    val tanggal: String = "Hari ini",
-
-    @SerializedName(value = "image_url", alternate = ["image_name"])
-    val imageUrl: String = ""
+    val id: Int = 0,
+    val userId: Int,
+    val title: String,
+    val category: String,
+    val amount: Int,
+    val date: String,
+    val imageUrl: String = "",
+    val iconName: String = "category",
+    val isFavorite: Boolean = false,
+    val isExpense: Boolean = true
 )
 
-/**
- * State untuk merepresentasikan kondisi UI pada layar daftar transaksi.
- */
+fun Finance.toEntity() = FinanceEntity(
+    id = id,
+    userId = userId,
+    title = title,
+    category = category,
+    amount = amount,
+    date = date,
+    imageUrl = imageUrl,
+    iconName = iconName,
+    isFavorite = isFavorite,
+    isExpense = isExpense
+)
+
+fun FinanceEntity.toModel() = Finance(
+    id = id,
+    userId = userId,
+    title = title,
+    category = category,
+    amount = amount,
+    date = date,
+    imageUrl = imageUrl,
+    iconName = iconName,
+    isFavorite = isFavorite,
+    isExpense = isExpense
+)
+
 sealed class FinanceUiState {
     object Loading : FinanceUiState()
     data class Success(val data: List<Finance>) : FinanceUiState()
